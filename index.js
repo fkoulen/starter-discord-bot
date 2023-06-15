@@ -10,10 +10,12 @@ const GUILD_ID = process.env.GUILD_ID
 const axios = require('axios')
 const express = require('express');
 const { InteractionType, InteractionResponseType, verifyKeyMiddleware } = require('discord-interactions');
+const {json} = require("body-parser");
 
 
 const app = express();
-// app.use(bodyParser.json());
+
+app.use(json());
 
 const discord_api = axios.create({
   baseURL: 'https://discord.com/api/',
@@ -27,7 +29,10 @@ const discord_api = axios.create({
 });
 
 
-
+app.post("/hook", (req, res) => {
+  console.log(req.body) // Call your action on the request here
+  res.status(200).end() // Responding is important
+})
 
 app.post('/interactions', verifyKeyMiddleware(PUBLIC_KEY), async (req, res) => {
   const interaction = req.body;
